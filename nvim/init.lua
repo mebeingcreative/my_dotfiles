@@ -188,11 +188,12 @@ require('lazy').setup {
         ':Git fetch origin',
         { desc = '[G]it [F]etch' }
       )
-      vim.keymap.set('n', '<leader>gp', function()
-        vim.schedule(function()
-          vim.cmd.Git 'push'
-        end)
-      end, { desc = '[G]it [P]ush' })
+      vim.keymap.set(
+        'n',
+        '<leader>gl',
+        ':Git log --patch %',
+        { desc = '[G]it [L]og' }
+      )
       vim.keymap.set('n', '<leader>gb', function()
         vim.cmd.Git 'blame'
       end, { desc = '[G]it [B]lame' })
@@ -819,9 +820,9 @@ require('lazy').setup {
       )
       vim.keymap.set(
         'n',
-        '<leader>fr',
+        '<leader>fc',
         require('telescope.builtin').live_grep,
-        { desc = '[F]ind by G[r]ep' }
+        { desc = '[F]ind [C]ontent with grep' }
       )
       vim.keymap.set(
         'n',
