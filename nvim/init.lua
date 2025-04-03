@@ -67,6 +67,9 @@ vim.o.timeoutlen = 300
 -- Enable True Colors
 vim.o.termguicolors = true
 
+vim.o.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20'
+  .. ',a:blinkwait700-blinkoff400-blinkon250'
+
 -- Leave wrapping as is in Diff Mode
 -- opt is a table, where diffopt is a string
 vim.opt.diffopt:append 'followwrap'
@@ -179,19 +182,20 @@ require('lazy').setup {
         vim.cmd.Git,
         { desc = '[G]it [S]tatus' }
       )
-      -- TODO: show Git command on commandline or make async
-      -- think about doing a fetch instead
-      vim.keymap.set('n', '<leader>gl', function()
-        vim.schedule(function()
-          vim.cmd.Git 'pull'
-        end)
-      end, { desc = '[G]it Pul[l]' })
-      -- TODO: show Git command on commandline or make async
+      vim.keymap.set(
+        'n',
+        '<leader>gf',
+        ':Git fetch origin',
+        { desc = '[G]it [F]etch' }
+      )
       vim.keymap.set('n', '<leader>gp', function()
-        vim.schedule(function ()
+        vim.schedule(function()
           vim.cmd.Git 'push'
         end)
       end, { desc = '[G]it [P]ush' })
+      vim.keymap.set('n', '<leader>gb', function()
+        vim.cmd.Git 'blame'
+      end, { desc = '[G]it [B]lame' })
     end,
   },
   { -- Adds git related signs to the gutter, as well as
@@ -271,6 +275,9 @@ require('lazy').setup {
       vim.keymap.set('n', '[t', function()
         require('todo-comments').jump_prev()
       end, { desc = 'Previous todo comment' })
+      vim.keymap.set('n', '<leader>ft', function()
+        vim.cmd 'TodoTelescope keywords=TODO,FIX'
+      end, { desc = '[F]ind [T]odos' })
     end,
   },
   { -- color theme
@@ -757,6 +764,7 @@ require('lazy').setup {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          file_ignore_patterns = { '.git/' },
           layout_strategy = 'vertical',
           border = false,
           layout_config = {
@@ -782,77 +790,73 @@ require('lazy').setup {
       pcall(require('telescope').load_extension, 'ui-select')
 
       -- See `:help telescope.builtin`
-      local builtin = require 'telescope.builtin'
       vim.keymap.set(
         'n',
         '<leader>fh',
-        builtin.help_tags,
+        require('telescope.builtin').help_tags,
         { desc = '[F]ind [H]elp' }
       )
       vim.keymap.set(
         'n',
         '<leader>fk',
-        builtin.keymaps,
+        require('telescope.builtin').keymaps,
         { desc = '[F]ind [K]eymaps' }
       )
-      vim.keymap.set(
-        'n',
-        '<leader>ff',
-        builtin.find_files,
-        { desc = '[F]ind [F]ile' }
-      )
+      vim.keymap.set('n', '<leader>ff', function()
+        require('telescope.builtin').find_files { hidden = true }
+      end, { desc = '[F]ind [F]ile' })
       vim.keymap.set(
         'n',
         '<leader>fs',
-        builtin.builtin,
+        require('telescope.builtin').builtin,
         { desc = '[F]ind [S]elect Telescope' }
       )
       vim.keymap.set(
         'n',
         '<leader>fw',
-        builtin.grep_string,
+        require('telescope.builtin').grep_string,
         { desc = '[F]ind current [W]ord' }
       )
       vim.keymap.set(
         'n',
-        '<leader>fg',
-        builtin.live_grep,
-        { desc = '[F]ind by [G]rep' }
+        '<leader>fr',
+        require('telescope.builtin').live_grep,
+        { desc = '[F]ind by G[r]ep' }
       )
       vim.keymap.set(
         'n',
         '<leader>fd',
-        builtin.diagnostics,
+        require('telescope.builtin').diagnostics,
         { desc = '[F]ind [D]iagnostics' }
       )
       vim.keymap.set(
         'n',
         '<leader>fr',
-        builtin.resume,
+        require('telescope.builtin').resume,
         { desc = '[F]ind [R]esume' }
       )
       vim.keymap.set(
         'n',
         '<leader>fm',
-        builtin.man_pages,
+        require('telescope.builtin').man_pages,
         { desc = '[F]ind [M]an Pages' }
       )
       vim.keymap.set(
         'n',
-        '<leader>gf',
-        builtin.git_files,
-        { desc = '[G]it [F]ind' }
+        '<leader>fg',
+        require('telescope.builtin').git_files,
+        { desc = '[F]ind in [G]it files' }
       )
       vim.keymap.set(
         'n',
         '<leader>f.',
-        builtin.oldfiles,
+        require('telescope.builtin').oldfiles,
         { desc = '[F]ind Recent Files ("." for repeat)' }
       )
       vim.keymap.set(
         'n',
         '<leader>fb',
-        builtin.buffers,
+        require('telescope.builtin').buffers,
         { desc = '[F]ind [B]uffers' }
       )
 
