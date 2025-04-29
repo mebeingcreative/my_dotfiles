@@ -1,0 +1,23 @@
+[user]
+  email = 668931+mebeingcreative@users.noreply.github.com
+  name = Victor Ruch
+[color]
+  ui = auto
+[init]
+  defaultBranch = main
+[includeIf "gitdir:~/work/"]
+  path = work-config
+[credential]
+  helper = cache
+[pull]
+  ff = only
+[merge]
+  tool = nvimdiff
+[alias]
+  graph = log --graph --oneline --decorate
+  patch = log --patch --oneline --decorate --word-diff=color
+  d = diff --word-diff=color
+  s = status --short
+[grep]
+  lineNumber = true
+  patternType = perl
